@@ -7,7 +7,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class StudentDto {
+public class StudentRequest {
 
     private Long seq;
 

@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class StudentDto {
+public class StudentRequest {
 
     long seq;
 

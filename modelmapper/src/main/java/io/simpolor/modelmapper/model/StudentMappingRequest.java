@@ -7,7 +7,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class StudentMappingDto {
+public class StudentMappingRequest {
 
     private Long studentSeq;
 

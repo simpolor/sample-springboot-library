@@ -1,34 +1,36 @@
 package io.simpolor.modelmapper.test;
 
-import io.simpolor.modelmapper.model.StudentDto;
-import io.simpolor.modelmapper.model.StudentMappingDto;
+import io.simpolor.modelmapper.model.StudentRequest;
+import io.simpolor.modelmapper.model.StudentMappingRequest;
 import io.simpolor.modelmapper.repository.entity.Student;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
-@SpringBootTest
+// @SpringBootTest
 public class ModelMapperTest {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    // @Autowired
+    // private ModelMapper modelMapper;
 
     @Test
     public void testMap(){
 
+        // config
+        ModelMapper modelMapper = new ModelMapper();
+
         // given
-        StudentDto studentDto = new StudentDto();
-        studentDto.setSeq(1L);
-        studentDto.setName("simpolor");
-        studentDto.setHobbies(Arrays.asList("축구"));
+        StudentRequest request = new StudentRequest();
+        request.setSeq(1L);
+        request.setName("simpolor");
+        request.setHobbies(Arrays.asList("축구"));
 
         // when
-        Student actual = modelMapper.map(studentDto, Student.class);
+        Student actual = modelMapper.map(request, Student.class);
 
         // then
         Assertions.assertThat(actual).isNotNull();
@@ -41,19 +43,21 @@ public class ModelMapperTest {
     public void testAddMapping(){
 
         // config
-        modelMapper.createTypeMap(StudentMappingDto.class, Student.class)
-                .addMapping(StudentMappingDto::getStudentSeq, Student::setSeq)
-                .addMapping(StudentMappingDto::getStudentName, Student::setName)
-                .addMapping(StudentMappingDto::getStudentHobbies, Student::setHobbies);
+        ModelMapper modelMapper = new ModelMapper();
+
+        modelMapper.createTypeMap(StudentMappingRequest.class, Student.class)
+                .addMapping(StudentMappingRequest::getStudentSeq, Student::setSeq)
+                .addMapping(StudentMappingRequest::getStudentName, Student::setName)
+                .addMapping(StudentMappingRequest::getStudentHobbies, Student::setHobbies);
 
         // given
-        StudentMappingDto studentMappingDto = new StudentMappingDto();
-        studentMappingDto.setStudentSeq(1L);
-        studentMappingDto.setStudentName("simpolor");
-        studentMappingDto.setStudentHobbies(Arrays.asList("축구"));
+        StudentMappingRequest request = new StudentMappingRequest();
+        request.setStudentSeq(1L);
+        request.setStudentName("simpolor");
+        request.setStudentHobbies(Arrays.asList("축구"));
 
         // when
-        Student actual = modelMapper.map(studentMappingDto, Student.class);
+        Student actual = modelMapper.map(request, Student.class);
 
         // then
         Assertions.assertThat(actual).isNotNull();
@@ -66,7 +70,9 @@ public class ModelMapperTest {
     public void testAddMappings(){
 
         // config
-        modelMapper.createTypeMap(StudentMappingDto.class, Student.class)
+        ModelMapper modelMapper = new ModelMapper();
+
+        modelMapper.createTypeMap(StudentMappingRequest.class, Student.class)
                 .addMappings(mapping -> {
                     mapping.map(source -> source.getStudentSeq(), Student::setSeq);
                     mapping.map(source -> source.getStudentName(), Student::setName);
@@ -75,13 +81,13 @@ public class ModelMapperTest {
                 });
 
         // given
-        StudentMappingDto studentMappingDto = new StudentMappingDto();
-        studentMappingDto.setStudentSeq(1L);
-        studentMappingDto.setStudentName("simpolor");
-        studentMappingDto.setStudentHobbies(Arrays.asList("축구"));
+        StudentMappingRequest request = new StudentMappingRequest();
+        request.setStudentSeq(1L);
+        request.setStudentName("simpolor");
+        request.setStudentHobbies(Arrays.asList("축구"));
 
         // when
-        Student actual = modelMapper.map(studentMappingDto, Student.class);
+        Student actual = modelMapper.map(request, Student.class);
 
         // then
         Assertions.assertThat(actual).isNotNull();
