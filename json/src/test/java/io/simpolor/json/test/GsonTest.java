@@ -1,11 +1,8 @@
 package io.simpolor.json.test;
 
 import com.google.gson.*;
-import io.simpolor.json.model.Student;
+import io.simpolor.json.model.StudentDto;
 import org.assertj.core.api.Assertions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -16,7 +13,7 @@ public class GsonTest {
     public void testObjectToJsonStr() {
 
         // given
-        Student student = new Student();
+        StudentDto student = new StudentDto();
         student.setSeq(1);
         student.setName("simpolor");
         student.setHobbies(Arrays.asList("soccer"));
@@ -40,7 +37,7 @@ public class GsonTest {
 
         // when
         Gson gson = new Gson();
-        Student actual = gson.fromJson(jsonStr, Student.class);
+        StudentDto actual = gson.fromJson(jsonStr, StudentDto.class);
 
         // print
         System.out.println(actual.toString());

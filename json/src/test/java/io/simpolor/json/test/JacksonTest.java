@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.simpolor.json.model.Student;
+import io.simpolor.json.model.StudentDto;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class JacksonTest {
     public void testObjectToJsonStr() throws JsonProcessingException {
 
         // given
-        Student student = new Student();
+        StudentDto student = new StudentDto();
         student.setSeq(1);
         student.setName("simpolor");
         student.setHobbies(Arrays.asList("soccer"));
@@ -43,14 +42,14 @@ public class JacksonTest {
 
         // when
         ObjectMapper objectMapper = new ObjectMapper();
-        Student actual = objectMapper.readValue(jsonStr, Student.class);
+        StudentDto actual = objectMapper.readValue(jsonStr, StudentDto.class);
 
         // print
         System.out.println(actual.toString());
 
         // then
         Assertions.assertThat(actual).isNotNull();
-        Assertions.assertThat(actual).extracting(Student::getSeq).isEqualTo(1L);
+        Assertions.assertThat(actual).extracting(StudentDto::getSeq).isEqualTo(1L);
     }
 
     @Test
@@ -63,14 +62,14 @@ public class JacksonTest {
 
         // when
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Student> actual = objectMapper.readValue(jsonArray, new TypeReference<List<Student>>() {});
+        List<StudentDto> actual = objectMapper.readValue(jsonArray, new TypeReference<List<StudentDto>>() {});
 
         // print
         System.out.println(actual.toString());
 
         // then
         Assertions.assertThat(actual).isNotEmpty();
-        Assertions.assertThat(actual).first().extracting(Student::getSeq).isEqualTo(1L);
+        Assertions.assertThat(actual).first().extracting(StudentDto::getSeq).isEqualTo(1L);
     }
 
     @Test
@@ -101,7 +100,7 @@ public class JacksonTest {
         ObjectMapper objectMapper = new ObjectMapper();
         // 존재하지 않는 필드 무시 설정
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        Student actual = objectMapper.readValue(jsonStr, Student.class);
+        StudentDto actual = objectMapper.readValue(jsonStr, StudentDto.class);
 
         // print
         System.out.println(actual.toString());
