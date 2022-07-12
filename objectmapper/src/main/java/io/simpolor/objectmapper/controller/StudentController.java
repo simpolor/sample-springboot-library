@@ -64,10 +64,12 @@ public class StudentController {
 
 	@RequestMapping(value="/{studentId}", method=RequestMethod.PUT)
 	public void modify(@PathVariable Long studentId,
-					   @RequestBody StudentDto request) {
+					   String request) throws JsonProcessingException {
 
-		request.setId(studentId);
-		studentService.update(request.toEntity());
+		StudentDto studentDto = objectMapper.readValue(request, StudentDto.class);
+		studentDto.setId(studentId);
+
+		studentService.update(studentDto.toEntity());
 	}
 
 	@RequestMapping(value="/{studentId}", method=RequestMethod.DELETE)
