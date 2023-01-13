@@ -1,8 +1,10 @@
 package io.simpolor.gson.repository;
 
+import com.google.gson.Gson;
 import io.simpolor.gson.repository.entity.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,16 +14,31 @@ import java.util.stream.Collectors;
 public class StudentRepository {
 
     public static Long INDEX = 1L;
-    public static Map<Long, Student> studentMap = new HashMap<>();
+    public static Map<Long, String> studentMap = new HashMap<>();
+
+    private  final Gson gson = new Gson();
 
     public List<Student> findAll(){
 
-        return studentMap.keySet().stream().map(key -> studentMap.get(key)).collect(Collectors.toList());
+        String data = studentMap.keySet().stream()
+                .map(key -> studentMap.get(key))
+                .collect(Collectors.joining(", ", "[", "]"));
+
+        if(StringUtils.isEmpty(data)){
+            return Collections.EMPTY_LIST;
+        }
+
+        return gson.fromJson(data, new ListOfJson<>(Student.class));
     }
 
     public Optional<Student> findById(Long studentId){
 
-        return Optional.ofNullable(studentMap.get(studentId));
+        String data = studentMap.get(studentId);
+        if(Objects.nonNull(data)){
+            return Optional.of(gson.fromJson(data, Student.class));
+        }
+
+        return Optional.empty();
     }
 
     public Student save(Student student){
@@ -29,7 +46,8 @@ public class StudentRepository {
         if(Objects.isNull(student.getStudentId())){
             student.setStudentId(INDEX++);
         }
-        studentMap.put(student.getStudentId(), student);
+
+        studentMap.put(student.getStudentId(), gson.toJson(student));
 
         return student;
     }

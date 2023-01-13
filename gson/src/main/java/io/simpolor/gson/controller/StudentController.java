@@ -1,8 +1,6 @@
 package io.simpolor.gson.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import io.simpolor.gson.model.ResultDto;
 import io.simpolor.gson.model.StudentDto;
 import io.simpolor.gson.repository.entity.Student;
@@ -12,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,15 +21,7 @@ public class StudentController {
 
 	private final StudentService studentService;
 
-	ObjectMapper objectMapper;
-
-	@PostConstruct
-	public void init(){
-		objectMapper = new ObjectMapper();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
-
-	@RequestMapping(value="", method=RequestMethod.GET)
+	@GetMapping
 	public List<StudentDto> list() {
 
 		List<Student> students = studentService.getAll();
@@ -43,7 +32,7 @@ public class StudentController {
 		return StudentDto.of(students);
 	}
 
-	@RequestMapping(value="/{studentId}", method=RequestMethod.GET)
+	@GetMapping(value="/{studentId}")
 	public StudentDto detail(@PathVariable Long studentId) {
 
 		Student student = studentService.get(studentId);
@@ -51,15 +40,12 @@ public class StudentController {
 		return StudentDto.of(student);
 	}
 
-	@RequestMapping(value="", method=RequestMethod.POST)
-	public ResultDto register(String request) throws JsonProcessingException {
+	@PostMapping
+	public ResultDto register(@RequestBody StudentDto request) {
 
-		StudentDto studentDto = objectMapper.readValue(request, StudentDto.class);
-		Student student = studentService.create(studentDto.toEntity());
+		Student student = studentService.create(request.toEntity());
 
-		return ResultDto.builder()
-				.id(student.getStudentId())
-				.build();
+		return ResultDto.of(student.getStudentId());
 	}
 
 	@RequestMapping(value="/{studentId}", method=RequestMethod.PUT)

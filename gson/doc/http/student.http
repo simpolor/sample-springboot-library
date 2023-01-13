@@ -26,7 +26,7 @@ PUT http://127.0.0.1:8080/students/1
 Content-Type: application/json
 
 {
-  "name": "박석영",
+  "name": "박석영2",
   "grade": 2,
   "age": 18,
   "hobbies": ["축구", "프로그래밍"]
